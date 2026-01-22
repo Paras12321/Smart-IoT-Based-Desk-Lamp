@@ -21,7 +21,7 @@ const int BASE_SERVO_MAX_ROTATION = 90;
 const int HEAD_SERVO_MIN_ANGLE = 20;
 const int HEAD_SERVO_MAX_ANGLE = 75;
 
-bool autoOverride = false;  // true = user manually intervened
+bool autoOverride = false; 
 int last_base_angle;
 int last_head_angle;
 int target_base_angle;
@@ -31,7 +31,7 @@ int head_servo = 90;
 unsigned long lastlcdupdate = 0;
 bool lastTouchState = LOW;
 unsigned long lastTouchTime = 0;
-const unsigned long TOUCH_DEBOUNCE = 300;  // ms
+const unsigned long TOUCH_DEBOUNCE = 300; 
 unsigned long lastMotionTime = 0;
 const unsigned long MOTION_TIMEOUT = 30000;
 bool profile_active = false;
@@ -74,21 +74,21 @@ static const char *lamp_mode_list[] = {
 void applyProfileSettings() {
 
   if (strcmp(Profile, "Reading") == 0) {
-    hue = map(40, 0, 360, 0, 65535);  // warm white
+    hue = map(40, 0, 360, 0, 65535);  
     saturation = 40;
     brightness = 220;
     lcd.clear();
     lcd.setCursor(0, 1);
     lcd.print("Profile : Reading");
   } else if (strcmp(Profile, "Research") == 0) {
-    hue = map(55, 0, 360, 0, 65535);  // neutral white
+    hue = map(55, 0, 360, 0, 65535);  
     saturation = 90;
     brightness = 180;
     lcd.clear();
     lcd.setCursor(0, 1);
     lcd.print("Profile : Research");
   } else if (strcmp(Profile, "Night") == 0) {
-    hue = map(10, 0, 360, 0, 65535);  // amber
+    hue = map(10, 0, 360, 0, 65535);  
     saturation = 255;
     brightness = 15;
     lcd.clear();
@@ -97,7 +97,7 @@ void applyProfileSettings() {
   }
 }
 
-// -------- WRITE CALLBACK --------
+// CALLBACS
 void write_callback(Device *device, Param *param,
                     const param_val_t val, void *priv_data,
                     write_ctx_t *ctx) {
@@ -153,12 +153,10 @@ void write_callback(Device *device, Param *param,
   } else if (strcmp(param->getParamName(), "Head Rotation") == 0) {
     head_servo = val.val.i;
     target_head_angle = head_servo;
-    // HeadServo.write(head_servo);
     param->updateAndReport(val);
   }
 
   if (Lampon) {
-    // strip.setBrightness(brightness);
     strip.setBrightness(brightness);
     apply_huecolor();
     strip.show();
@@ -183,9 +181,7 @@ void setup() {
   pinMode(Touch_Pin, INPUT_PULLDOWN);
   pinMode(PIR_PIN, INPUT);
   Serial.println("PIR warming up...");
-  // delay(30000);
   Serial.println("PIR Ready!");
-  // Register events
   WiFi.onEvent(sysProvEvent);
 
   configTime(19800, 0, "pool.ntp.org");
@@ -198,8 +194,6 @@ void setup() {
   strip.setBrightness(brightness);
   strip.show();
 
-
-  // Init RainMaker node
   my_node = RMaker.initNode("ESP-32 Lamp");
 
   // Create device
@@ -263,7 +257,7 @@ void setup() {
 
   lamp->addCb(write_callback);
   my_node.addDevice(*lamp);
-  // ---- PROVISIONING (CORRECT WAY) ----
+  // ---- PROVISIONING ----
   WiFiProv.initProvision(
     NETWORK_PROV_SCHEME_BLE,
     NETWORK_PROV_SCHEME_HANDLER_FREE_BTDM);
@@ -314,7 +308,7 @@ void loop() {
       lcd.print("Time: --:--:--");
     }
   }
-  // ---------- TOUCH SENSOR TOGGLE ----------
+  //TOUCH SENSOR
   bool currentTouchState = digitalRead(Touch_Pin);
 
   if (strcmp(control_mode, "Manual") == 0 && currentTouchState && !lastTouchState && (millis() - lastTouchTime > TOUCH_DEBOUNCE)) {
@@ -341,10 +335,10 @@ void loop() {
   lastTouchState = currentTouchState;
 
 
-  // ---------- AUTO MODE WITH PIR ----------
+  // AUTO MODE WITH PIR
   if (strcmp(control_mode, "Auto") == 0) {
 
-    // ---- PIR DETECTION ----
+    // PIR DETECTION 
     if (digitalRead(PIR_PIN) == HIGH && !autoOverride) {
 
       lastMotionTime = millis();
@@ -359,7 +353,7 @@ void loop() {
       }
     }
 
-    // ---- AUTO OFF AFTER TIMEOUT ----
+    // PIR auto OFF-
     if (Lampon && (millis() - lastMotionTime > MOTION_TIMEOUT)) {
       Lampon = false;
       autoOverride = false;
@@ -370,7 +364,7 @@ void loop() {
     }
   }
 
-  // ---------- AUTO BRIGHTNESS USING LDR ----------
+  // automatic brightness using LDR
   if (Lampon && strcmp(control_mode, "Auto") == 0 && !profile_active) {
 
     int ldrvalue = analogRead(LDR_PIN);
