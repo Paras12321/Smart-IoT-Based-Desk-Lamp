@@ -2,7 +2,7 @@
 This project presents a smart lamp with Manual, Auto, and limited Voice control modes. It features RGB color control, saturation and brightness adjustment, multiple lighting profiles, servo-based head and base movement, and adaptive brightness control, along with motion-based and touch-based ON/OFF operation.
 # Smart AI Lamp using ESP32
 
-## 📌 Project Overview
+## Project Overview
 This project presents a **smart lamp** that can be controlled in **three modes: Manual, Auto, and limited Voice control**.  
 The system combines automation, IoT, and user interaction to provide intelligent lighting with enhanced functionality and convenience.
 
@@ -54,4 +54,3 @@ Touch input and motion sensing provide additional interaction for seamless opera
 
 ---
 
-## 📁 Project Structure
